@@ -49,6 +49,9 @@ def get_attr_usage(slaves_state, attrs):
         cpu_used = cpu_used + slave["used_resources"]['cpus']
         ram_used = ram_used + slave["used_resources"]['mem']
 
+    ram_total = round(ram_total/1000)
+    ram_used = round(ram_used/1000)
+
     return {
         'cpu_total': cpu_total,
         'ram_total': ram_total,

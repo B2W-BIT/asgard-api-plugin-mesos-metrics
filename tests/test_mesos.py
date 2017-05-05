@@ -38,11 +38,11 @@ class MesosTest(TestCase):
             self.assertDictEqual(
                 result,
                 {
-                    'ram_used': 1600.0,
                     'cpu_used': 6.0,
-                    'ram_total': 24000.0,
-                    'cpu_pct': 50.0,
-                    'ram_pct': 6.7,
-                    'cpu_total': 12.0
+                    'ram_used': 16,
+                    'ram_total': 24,
+                    'cpu_total': 12.0,
+                    'ram_pct': 66.7,
+                    'cpu_pct': 50.0
                 }
             )
