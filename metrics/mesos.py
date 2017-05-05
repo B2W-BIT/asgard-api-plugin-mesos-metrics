@@ -1,23 +1,15 @@
-from .config import MESOS_URL
+from metrics.config import MESOS_URL
 from requests import get
 from collections import defaultdict
+from unittest import skip
 
-MESOS_STATE = None
+def get_mesos_slaves():
+    return get("{}/slaves".format(MESOS_URL)).json()
 
-def get_state(use_cache=True):
-    global MESOS_STATE
-
-    if use_cache and MESOS_STATE:
-        return MESOS_STATE
-
-    MESOS_STATE = get("{}/state".format(MESOS_URL)).json()
-
-    return MESOS_STATE
-
-def get_slaves_attr():
+def get_slaves_attr(slaves_state):
     attrs = defaultdict(set)
 
-    for slave in get_state()['slaves']:
+    for slave in slaves_state['slaves']:
         for attr in slave['attributes']:
             attrs[attr].add(slave['attributes'][attr])
 
@@ -26,10 +18,10 @@ def get_slaves_attr():
 
     return dict(attrs)
 
-def get_slaves_with_attr(attrs):
+def get_slaves_with_attr(slaves_state, attrs):
     slaves = []
 
-    for slave in get_state()['slaves']:
+    for slave in slaves_state['slaves']:
         intersection = dict(set(slave['attributes'].items()).intersection(set(attrs.items())))
 
         if intersection != attrs:
@@ -39,24 +31,29 @@ def get_slaves_with_attr(attrs):
 
     return slaves
 
-def get_slaves_attr_usage(attrs):
-    slaves = get_slaves_with_attr(attrs)
+def get_attr_usage(slaves_state, attrs):
+    slaves = get_slaves_with_attr(slaves_state, attrs)
+
     usage = 0
 
-    total_availble_cpu = 0
-    total_availble_ram = 0
+    cpu_total = 0
+    ram_total = 0
 
-    total_used_cpu = 0
-    total_used_ram = 0
+    cpu_used = 0
+    ram_used = 0
 
     for slave in slaves:
-        total_availble_cpu = total_availble_cpu + slave["resources"]['cpus']
-        total_availble_ram = total_availble_ram + slave["resources"]['mem']
+        cpu_total = cpu_total + slave["resources"]['cpus']
+        ram_total = ram_total + slave["resources"]['mem']
 
-        total_used_cpu = total_used_cpu + slave["used_resources"]['cpus']
-        total_used_ram = total_used_ram + slave["used_resources"]['mem']
+        cpu_used = cpu_used + slave["used_resources"]['cpus']
+        ram_used = ram_used + slave["used_resources"]['mem']
 
     return {
-        'cpu': round(total_used_cpu*100/total_availble_cpu),
-        'ram': round(total_used_ram*100/total_availble_ram)
+        'cpu_total': cpu_total,
+        'ram_total': ram_total,
+        'cpu_used': cpu_used,
+        'ram_used': ram_used,
+        'cpu_pct': round(cpu_used*100/cpu_total, 1),
+        'ram_pct': round(ram_used*100/ram_total, 1)
     }

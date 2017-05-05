@@ -30,24 +30,35 @@ def requires_auth(f):
 @app.route('/attrs')
 @requires_auth
 def attrs():
+    slaves_state = mesos.get_mesos_slaves()
     return Response(
-        dumps(mesos.get_slaves_attr()),
+        dumps(mesos.get_slaves_attr(slaves_state)),
         mimetype='application/json'
     )
 
 @app.route('/slaves-with-attrs')
 @requires_auth
 def slaves_with_attrs():
+    slaves_state = mesos.get_mesos_slaves()
+    result = mesos.get_slaves_with_attr(
+        slaves_state,
+        dict(request.args.items())
+    )
     return Response(
-        dumps(mesos.get_slaves_with_attr(dict(request.args.items()))),
+        dumps(result),
         mimetype='application/json'
     )
 
-@app.route('/slaves-attr-usage')
+@app.route('/attr-usage')
 @requires_auth
 def slaves_attr_usage():
+    slaves_state = mesos.get_mesos_slaves()
+    result = mesos.get_attr_usage(
+        slaves_state,
+        dict(request.args.items())
+    )
     return Response(
-        dumps(mesos.get_slaves_attr_usage(dict(request.args.items()))),
+        dumps(result),
         mimetype='application/json'
     )
 
