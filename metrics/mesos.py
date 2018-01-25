@@ -1,7 +1,6 @@
 from metrics.config import MESOS_URL
 from requests import get
 from collections import defaultdict
-from unittest import skip
 
 def get_mesos_slaves():
     return get("{}/slaves".format(MESOS_URL)).json()

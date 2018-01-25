@@ -1,9 +1,7 @@
 # Mesos Metrics (docker.sieve.com.br/mesos-metrics)
 
 ## Env vars
-* MESOS_URL: Url to connect to Mesos
-* BASICAUTH_USERNAME: Username credential to access the metrics
-* BASICAUTH_PASSWORD: Password credential to access the metrics
+* ASGARD_MESOS_METRICS_URL: Url to connect to Mesos
 
 ## Routes:
 * /attrs: Returns the attrs available on the cluster.
