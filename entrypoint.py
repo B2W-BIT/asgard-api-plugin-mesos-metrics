@@ -2,9 +2,14 @@ from flask import Blueprint, Response, request
 from metrics import mesos, config
 from json import dumps
 
-app = Blueprint(__name__, __name__)
+mesos_metrics_blueprint = Blueprint(__name__, __name__)
 
-@app.route('/attrs')
+def asgard_api_plugin_init():
+    return {
+        'blueprint': mesos_metrics_blueprint
+    }
+
+@mesos_metrics_blueprint.route('/attrs')
 def attrs():
     slaves_state = mesos.get_mesos_slaves()
     return Response(
@@ -12,7 +17,7 @@ def attrs():
         mimetype='application/json'
     )
 
-@app.route('/slaves-with-attrs')
+@mesos_metrics_blueprint.route('/slaves-with-attrs')
 def slaves_with_attrs():
     slaves_state = mesos.get_mesos_slaves()
     result = mesos.get_slaves_with_attr(
@@ -24,7 +29,7 @@ def slaves_with_attrs():
         mimetype='application/json'
     )
 
-@app.route('/attr-usage')
+@mesos_metrics_blueprint.route('/attr-usage')
 def slaves_attr_usage():
     slaves_state = mesos.get_mesos_slaves()
     result = mesos.get_attr_usage(
