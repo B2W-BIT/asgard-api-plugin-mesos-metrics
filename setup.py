@@ -10,7 +10,7 @@ setup(
 
     description='Asgard API endpoints to get Apache Mesos metrics',
     long_description="Plugin para a Asgard API e que fornece métricas do cluster de Apache Mesos",
-    url='https://github.com/B2W-BIT/asgard-api-plugin-mesos-metrics',
+    url='https://github.com/B2W-BIT/asgard-api-plugin-metrics-mesos',
     # Author details
     author='Dalton Barreto',
     author_email='',
