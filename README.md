@@ -1,5 +1,11 @@
 # Mesos Metrics (docker.sieve.com.br/mesos-metrics)
 
+## Changelog
+
+* 0.1.0
+  - Migração do projeto para ser um plugin do asgard-api
+
+
 ## Env vars
 * ASGARD_MESOS_METRICS_URL: Url to connect to Mesos
 
