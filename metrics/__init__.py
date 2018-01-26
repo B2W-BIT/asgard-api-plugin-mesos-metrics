@@ -54,6 +54,18 @@ def filter_mesos_metrics(server_ip, port, prefix):
             filtered_metrics[data_key] = data_value
     return filtered_metrics
 
+def get_mesos_leader_ip():
+    resp = requests.head(f"{config.MESOS_URL}/redirect")
+    leader_ip = resp.headers.get("Location").strip("//").split(":",1)[0]
+    return leader_ip
+
+@mesos_metrics_blueprint.route("/leader")
+def leader_metrics():
+    prefix = request.args.get("prefix", "")
+    server_ip = get_mesos_leader_ip()
+    filtered_metrics = filter_mesos_metrics(server_ip, 5050, prefix)
+    return Response(json.dumps(filtered_metrics), mimetype='application/json')
+
 @mesos_metrics_blueprint.route("/master/<string:server_ip>")
 def master_metrics(server_ip):
     prefix = request.args.get("prefix", "")

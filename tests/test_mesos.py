@@ -1,10 +1,11 @@
 from unittest import TestCase, mock
+import os
 
 from flask import Flask
 from responses import RequestsMock
 import json
 
-from metrics import mesos, mesos_metrics_blueprint
+from metrics import mesos, mesos_metrics_blueprint, config
 import tests
 from tests import with_json_fixture
 
@@ -53,6 +54,24 @@ class MesosTest(TestCase):
                     'cpu_pct': 50.0
                 }
             )
+
+    @with_json_fixture("fixtures/master-metrics.json")
+    def test_get_metrics_from_current_leader(self, leader_metrics_fixture):
+        with self.application.test_client() as client, \
+                mock.patch.multiple(config, MESOS_URL="http://10.0.0.1:5050", create=True):
+            with RequestsMock() as rsps:
+                rsps.add(method='HEAD', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.3:5050"})
+                rsps.add(method='GET', url="http://10.0.0.3:5050/metrics/snapshot", body=json.dumps(leader_metrics_fixture), status=200)
+                response = client.get("/metrics/leader?prefix=sys")
+                self.assertEqual(200, response.status_code)
+                metrics_data = json.loads(response.data)
+                self.assertEqual(6, len(metrics_data.keys()))
+                self.assertEqual(8, metrics_data["system/cpus_total"])
+                self.assertEqual(0.1, metrics_data["system/load_15min"])
+                self.assertEqual(0.21, metrics_data["system/load_1min"])
+                self.assertEqual(0.14, metrics_data["system/load_5min"])
+                self.assertEqual(269631488, metrics_data["system/mem_free_bytes"])
+                self.assertEqual(20935741440, metrics_data["system/mem_total_bytes"])
 
     @with_json_fixture("fixtures/master-metrics.json")
     def test_get_metrics_master_with_prefix(self, master_metrics_fixture):
