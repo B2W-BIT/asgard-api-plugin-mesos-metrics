@@ -6,7 +6,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='asgard-api-plugin-metrics-mesos',
-    version='0.1.0',
+    version='0.2.0',
 
     description='Asgard API endpoints to get Apache Mesos metrics',
     long_description="Plugin para a Asgard API e que fornece métricas do cluster de Apache Mesos",
@@ -23,7 +23,7 @@ setup(
 
     entry_points={
         'asgard_api_metrics_mountpoint': [
-            'init = metrics.entrypoint:asgard_api_plugin_init',
+            'init = metrics:asgard_api_plugin_init',
         ],
     },
 )

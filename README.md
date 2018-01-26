@@ -2,6 +2,9 @@
 
 ## Changelog
 
+* 0.2.0
+  - Versão 0.1.0 estava quebrada. Faltou o o registro do plugin
+
 * 0.1.0
   - Migração do projeto para ser um plugin do asgard-api
 
