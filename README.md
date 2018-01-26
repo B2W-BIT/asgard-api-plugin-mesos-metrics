@@ -2,6 +2,12 @@
 
 ## Changelog
 
+* 0.3.0rc2
+  - Novo endpoint para pegar métricas sempre do atual mesos master lider
+
+* 0.3.0rc1
+  - Novos endpoints para buscar métricas dos mesos master e slaves
+
 * 0.2.0
   - Versão 0.1.0 estava quebrada. Faltou o o registro do plugin
 
