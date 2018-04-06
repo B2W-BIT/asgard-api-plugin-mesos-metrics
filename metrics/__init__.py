@@ -8,13 +8,15 @@ from metrics import mesos, config
 
 mesos_metrics_blueprint = Blueprint(__name__, __name__)
 
-def asgard_api_plugin_init():
+def asgard_api_plugin_init(**kwargs):
+    config.logger = kwargs.get("logger", config.logger)
     return {
         'blueprint': mesos_metrics_blueprint
     }
 
 @mesos_metrics_blueprint.route('/attrs')
 def attrs():
+    config.logger.info("Reading attrs")
     slaves_state = mesos.get_mesos_slaves()
     return Response(
         dumps(mesos.get_slaves_attr(slaves_state)),
