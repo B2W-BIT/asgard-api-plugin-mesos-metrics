@@ -2,6 +2,9 @@
 
 ## Changelog
 
+* 0.4.rc1
+  - Recebe logger que é passado pela API no momento de inicializar o plugin
+
 * 0.3.0rc2
   - Novo endpoint para pegar métricas sempre do atual mesos master lider
 
