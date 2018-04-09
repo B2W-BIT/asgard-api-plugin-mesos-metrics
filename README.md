@@ -2,7 +2,11 @@
 
 ## Changelog
 
-* 0.4.rc1
+
+* 0.4.1
+  - Adição de logs de debug na chamada à API do mesos
+
+* 0.4.0
   - Recebe logger que é passado pela API no momento de inicializar o plugin
 
 * 0.3.0rc2
