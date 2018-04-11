@@ -13,7 +13,7 @@ setup(
     url='https://github.com/B2W-BIT/asgard-api-plugin-metrics-mesos',
     # Author details
     author='Dalton Barreto',
-    author_email='',
+    author_email='daltonmatos@gmail.com',
     license='MIT',
     classifiers=[
         'Programming Language :: Python :: 3.6',
