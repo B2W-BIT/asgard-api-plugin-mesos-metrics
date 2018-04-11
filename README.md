@@ -3,6 +3,11 @@
 ## Changelog
 
 
+* 0.5.0-rc1
+  - Implementação de endpoints `/attrs/count` e `/slaves-with-attrs/count`;
+  - Implementação da leitura de métricas sempre do mesos leader;
+  - Uso do asgard-api-sdk para ter acesso a envvars multi-valor.
+
 * 0.4.1
   - Adição de logs de debug na chamada à API do mesos
 
@@ -23,11 +28,14 @@
 
 
 ## Env vars
-* ASGARD_MESOS_METRICS_URL: Url to connect to Mesos
+* Todas as env são lidas pela `asgard-api-sdk`. As que são necessária aqui são 
+as que possuem sufixo `_MESOS_ADDRESS_<N>`. Mais detalhes na doc da `asgard-api-sdk`.
 
 ## Routes:
 * /attrs: Returns the attrs available on the cluster.
+* /attrs/count: Returns the count of all attributes used on the cluster
 * /slaves-with-attrs?**attr**=**value**: Returns slaves with the given attrs and values.
+* /slaves-with-attrs/count?**attr**=**value**: Returns the count of slaves with the given attrs and values.
 * /attr-usage?**attr**=**value**: Returns resource usage information about the given attributes.
 * /master/<ip>?prefix=<prefix>: Retorna as métricas do master que começam por <prefix>.
 * /slave/<ip>?prefix=<prefix>: Retorna as métricas do slave que começam por <prefix>
