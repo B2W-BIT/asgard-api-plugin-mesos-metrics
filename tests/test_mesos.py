@@ -64,6 +64,35 @@ class MesosTest(TestCase):
                 }
             )
 
+
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_attrs_endpoint(self, master_state_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps, \
+                mock.patch.multiple(config, MESOS_ADDRESSES=["http://10.0.0.1:5050"], create=True):
+
+            rsps.add(method='GET', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.1:5050"})
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(master_state_fixture), status=200)
+            response = client.get("/metrics/attrs")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(4, len(response_data))
+            self.assertEqual(["dc", "mesos", "owner", "workload"], sorted(response_data.keys()))
+
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_attrs_endpoint_count(self, master_state_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps, \
+                mock.patch.multiple(config, MESOS_ADDRESSES=["http://10.0.0.1:5050"], create=True):
+
+            rsps.add(method='GET', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.1:5050"})
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(master_state_fixture), status=200)
+            response = client.get("/metrics/attrs/count")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(1, len(response_data))
+            self.assertEqual(4, response_data['total_attrs'])
+
     @with_json_fixture("fixtures/master-metrics.json")
     def test_get_metrics_from_current_leader(self, leader_metrics_fixture):
         with self.application.test_client() as client, \
