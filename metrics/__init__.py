@@ -5,7 +5,7 @@ import requests
 from flask import Blueprint, Response, request
 
 from metrics import mesos, config
-from metrics.util import get_mesos_leader_address
+from asgard.sdk import mesos as mesos_asgard_sdk
 
 mesos_metrics_blueprint = Blueprint(__name__, __name__)
 
@@ -83,7 +83,7 @@ def filter_mesos_metrics(server_address, prefix):
 @mesos_metrics_blueprint.route("/leader")
 def leader_metrics():
     prefix = request.args.get("prefix", "")
-    server_address = get_mesos_leader_address()
+    server_address = mesos_asgard_sdk.get_mesos_leader_address()
     filtered_metrics = filter_mesos_metrics(server_address, prefix)
     return Response(json.dumps(filtered_metrics), mimetype='application/json')
 
