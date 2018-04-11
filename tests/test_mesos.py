@@ -65,6 +65,20 @@ class MesosTest(TestCase):
             )
 
 
+
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_get_slaves_with_attrs_count_endpoint(self, master_state_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps, \
+                mock.patch.multiple(config, MESOS_ADDRESSES=["http://10.0.0.1:5050"], create=True):
+
+            rsps.add(method='GET', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.1:5050"})
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(master_state_fixture), status=200)
+            response = client.get("/metrics/slaves-with-attrs/count?dc=bit")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(6, response_data['total_slaves'])
+
     @with_json_fixture("fixtures/master-slave-data.json")
     def test_attrs_endpoint(self, master_state_fixture):
         client = self.application.test_client()

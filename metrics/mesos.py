@@ -1,4 +1,3 @@
-from metrics.config import MESOS_URL
 from metrics import config
 from metrics.util import get_mesos_slaves
 from requests import get

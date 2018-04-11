@@ -27,13 +27,25 @@ def attrs_count():
 
 @mesos_metrics_blueprint.route('/attrs')
 def attrs():
-    config.logger.info("Reading attrs")
+    config.logger.debug("Reading attrs")
     slaves_state = mesos.get_mesos_slaves()
     return Response(
         dumps(mesos.get_slaves_attr(slaves_state)),
         mimetype='application/json'
     )
 
+
+@mesos_metrics_blueprint.route('/slaves-with-attrs/count')
+def slaves_with_attrs_count():
+    slaves_state = mesos.get_mesos_slaves()
+    result = mesos.get_slaves_with_attr(
+        slaves_state,
+        dict(request.args.items())
+    )
+    return Response(
+        dumps({'total_slaves': len(result)}),
+        mimetype='application/json'
+    )
 
 @mesos_metrics_blueprint.route('/slaves-with-attrs')
 def slaves_with_attrs():
