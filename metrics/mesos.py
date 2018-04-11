@@ -1,14 +1,7 @@
-from metrics.config import MESOS_URL
 from metrics import config
+from metrics.util import get_mesos_slaves
 from requests import get
 from collections import defaultdict
-
-def get_mesos_slaves():
-    url = f"{MESOS_URL}/slaves"
-    config.logger.debug({"action": "pre-fetch", "fetch-url": url})
-    response = get(url)
-    config.logger.debug({"action": "post-fetch", "fetch-url": url, "fetch-status": response.status_code})
-    return response.json()
 
 def get_slaves_attr(slaves_state):
     attrs = defaultdict(set)
