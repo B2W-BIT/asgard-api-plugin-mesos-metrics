@@ -54,6 +54,6 @@ def get_attr_usage(slaves_state, attrs):
         'ram_total': ram_total,
         'cpu_used': cpu_used,
         'ram_used': ram_used,
-        'cpu_pct': round(cpu_used*100/cpu_total, 1),
-        'ram_pct': round(ram_used*100/ram_total, 1)
+        'cpu_pct': round(cpu_used*100/(cpu_total or 1), 1),
+        'ram_pct': round(ram_used*100/(ram_total or 1), 1)
     }

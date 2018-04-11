@@ -64,6 +64,33 @@ class MesosTest(TestCase):
                 }
             )
 
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_attr_usage_no_usage(self, mesos_slaves_data):
+        """
+        Certificamos que conseguimos retonar um valor zero, ou seja,
+        caso não exista nenhum slave usando a tag escolhida no filtro.
+        """
+        client = self.application.test_client()
+        with RequestsMock() as rsps, \
+                mock.patch.multiple(config, MESOS_ADDRESSES=["http://10.0.0.1:5050"], create=True):
+
+            rsps.add(method='GET', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.1:5050"})
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(mesos_slaves_data), status=200)
+            response = client.get("/metrics/attr-usage?no-usage=none")
+            self.assertEqual(200, response.status_code)
+
+            self.assertDictEqual(
+                json.loads(response.data),
+                {
+                    'cpu_used': 0.0,
+                    'ram_used': 0,
+                    'ram_total': 0,
+                    'cpu_total': 0.0,
+                    'ram_pct': 0.0,
+                    'cpu_pct': 0.0
+                }
+            )
+
 
 
     @with_json_fixture("fixtures/master-slave-data.json")
