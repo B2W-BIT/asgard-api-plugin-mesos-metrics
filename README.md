@@ -3,7 +3,7 @@
 ## Changelog
 
 
-* 0.5.0-rc1
+* 0.5.0
   - Implementação de endpoints `/attrs/count` e `/slaves-with-attrs/count`;
   - Implementação da leitura de métricas sempre do mesos leader;
   - Uso do asgard-api-sdk para ter acesso a envvars multi-valor.
