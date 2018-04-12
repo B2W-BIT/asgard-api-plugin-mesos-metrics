@@ -5,7 +5,7 @@ from flask import Flask
 from responses import RequestsMock
 import json
 
-from metrics import mesos, mesos_metrics_blueprint, config, get_mesos_leader_address
+from metrics import mesos, mesos_metrics_blueprint, config
 import tests
 from tests import with_json_fixture
 
@@ -14,15 +14,11 @@ class MesosTest(TestCase):
     def setUp(self):
         self.application = Flask(__name__)
         self.application.register_blueprint(mesos_metrics_blueprint, url_prefix="/metrics")
+        self.get_mesos_leader_address_patcher = mock.patch('asgard.sdk.mesos.get_mesos_leader_address', return_value="http://10.0.0.1:5050")
+        self.get_mesos_leader_addres_mock = self.get_mesos_leader_address_patcher.start()
 
-    def test_get_mesos_leader_ip(self):
-        mesos_addresses = ["http://10.0.2.1:5050", "http://10.0.2.2:5050", "http://10.0.2.3:5050"]
-        with mock.patch.multiple(config, MESOS_ADDRESSES=mesos_addresses), \
-            RequestsMock() as rsps:
-            rsps.add("GET", url=mesos_addresses[0] + "/redirect", status=307, body="", headers={"Location": "//10.0.2.2:5050"})
-            mesos_leader_ip = get_mesos_leader_address()
-
-            self.assertEqual("http://10.0.2.2:5050", mesos_leader_ip)
+    def tearDown(self):
+        self.get_mesos_leader_address_patcher.stop()
 
     def test_get_slaves_attr(self):
         attrs = mesos.get_slaves_attr(tests.SLAVES_STATE)
@@ -64,14 +60,72 @@ class MesosTest(TestCase):
                 }
             )
 
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_attr_usage_no_usage(self, mesos_slaves_data):
+        """
+        Certificamos que conseguimos retonar um valor zero, ou seja,
+        caso não exista nenhum slave usando a tag escolhida no filtro.
+        """
+        client = self.application.test_client()
+        with RequestsMock() as rsps:
+
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(mesos_slaves_data), status=200)
+            response = client.get("/metrics/attr-usage?no-usage=none")
+            self.assertEqual(200, response.status_code)
+
+            self.assertDictEqual(
+                json.loads(response.data),
+                {
+                    'cpu_used': 0.0,
+                    'ram_used': 0,
+                    'ram_total': 0,
+                    'cpu_total': 0.0,
+                    'ram_pct': 0.0,
+                    'cpu_pct': 0.0
+                }
+            )
+
+
+
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_get_slaves_with_attrs_count_endpoint(self, master_state_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps:
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(master_state_fixture), status=200)
+            response = client.get("/metrics/slaves-with-attrs/count?dc=bit")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(6, response_data['total_slaves'])
+
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_attrs_endpoint(self, master_state_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps:
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(master_state_fixture), status=200)
+            response = client.get("/metrics/attrs")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(4, len(response_data))
+            self.assertEqual(["dc", "mesos", "owner", "workload"], sorted(response_data.keys()))
+
+    @with_json_fixture("fixtures/master-slave-data.json")
+    def test_attrs_endpoint_count(self, master_state_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps:
+            rsps.add(method='GET', url="http://10.0.0.1:5050/slaves", body=json.dumps(master_state_fixture), status=200)
+            response = client.get("/metrics/attrs/count")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(1, len(response_data))
+            self.assertEqual(4, response_data['total_attrs'])
+
     @with_json_fixture("fixtures/master-metrics.json")
     def test_get_metrics_from_current_leader(self, leader_metrics_fixture):
-        with self.application.test_client() as client, \
-                mock.patch.multiple(config, MESOS_ADDRESSES=["http://10.0.0.1:5050"], create=True):
+        with self.application.test_client() as client:
             with RequestsMock() as rsps:
-                rsps.add(method='GET', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.3:5050"})
-                rsps.add(method='GET', url="http://10.0.0.3:5050/metrics/snapshot", body=json.dumps(leader_metrics_fixture), status=200)
+                rsps.add(method='GET', url="http://10.0.0.1:5050/metrics/snapshot", body=json.dumps(leader_metrics_fixture), status=200)
                 response = client.get("/metrics/leader?prefix=sys")
+                self.get_mesos_leader_addres_mock.assert_called()
                 self.assertEqual(200, response.status_code)
                 metrics_data = json.loads(response.data)
                 self.assertEqual(6, len(metrics_data.keys()))
@@ -121,8 +175,7 @@ class MesosTest(TestCase):
     @with_json_fixture("fixtures/slave-metrics.json")
     def test_get_metrics_slave_with_prefix(self, slave_metrics_fixture):
         with self.application.test_client() as client:
-            with RequestsMock() as rsps, mock.patch.multiple(config, MESOS_ADDRESSES=["http://10.0.0.1:5050"]):
-                rsps.add(method='GET', url='http://10.0.0.1:5050/redirect', body='', status=307, headers={"Location": "//10.0.0.1:5050"})
+            with RequestsMock() as rsps:
                 rsps.add(method='GET', url="http://10.0.0.1:5050/metrics/snapshot", body=json.dumps(slave_metrics_fixture), status=200)
                 response = client.get("/metrics/leader?prefix=containerizer/mesos/provisioner/")
                 self.assertEqual(200, response.status_code)

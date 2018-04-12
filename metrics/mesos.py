@@ -1,14 +1,7 @@
-from metrics.config import MESOS_URL
 from metrics import config
+from metrics.util import get_mesos_slaves
 from requests import get
 from collections import defaultdict
-
-def get_mesos_slaves():
-    url = f"{MESOS_URL}/slaves"
-    config.logger.debug({"action": "pre-fetch", "fetch-url": url})
-    response = get(url)
-    config.logger.debug({"action": "post-fetch", "fetch-url": url, "fetch-status": response.status_code})
-    return response.json()
 
 def get_slaves_attr(slaves_state):
     attrs = defaultdict(set)
@@ -61,6 +54,6 @@ def get_attr_usage(slaves_state, attrs):
         'ram_total': ram_total,
         'cpu_used': cpu_used,
         'ram_used': ram_used,
-        'cpu_pct': round(cpu_used*100/cpu_total, 1),
-        'ram_pct': round(ram_used*100/ram_total, 1)
+        'cpu_pct': round(cpu_used*100/(cpu_total or 1), 1),
+        'ram_pct': round(ram_used*100/(ram_total or 1), 1)
     }
