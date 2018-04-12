@@ -1,6 +1,5 @@
 from os import getenv
 import logging
-
-MESOS_URL = getenv('ASGARD_MESOS_METRICS_URL')
+from asgard.sdk.options import get_option
 
 logger = logging.getLogger()

@@ -6,14 +6,14 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='asgard-api-plugin-metrics-mesos',
-    version='0.4.1',
+    version='0.5.0-rc1',
 
     description='Asgard API endpoints to get Apache Mesos metrics',
     long_description="Plugin para a Asgard API e que fornece métricas do cluster de Apache Mesos",
     url='https://github.com/B2W-BIT/asgard-api-plugin-metrics-mesos',
     # Author details
     author='Dalton Barreto',
-    author_email='',
+    author_email='daltonmatos@gmail.com',
     license='MIT',
     classifiers=[
         'Programming Language :: Python :: 3.6',
