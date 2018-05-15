@@ -1,0 +1,466 @@
+{
+   "tasks" : [
+      {
+         "id" : "ct:1526411520002:0:afiliados-sleep-10:",
+         "role" : "*",
+         "state" : "TASK_FINISHED",
+         "resources" : {
+            "disk" : 256,
+            "cpus" : 0.1,
+            "mem" : 32,
+            "gpus" : 0
+         },
+         "container" : {
+            "type" : "DOCKER",
+            "docker" : {
+               "privileged" : false,
+               "parameters" : [
+                  {
+                     "value" : "hollowman.appname=/chronos/infra/curator-delete-indices",
+                     "key" : "label"
+                  }
+               ],
+               "force_pull_image" : true,
+               "network" : "BRIDGE",
+               "image" : "alpine:3.4"
+            }
+         },
+         "executor_id" : "",
+         "framework_id" : "3db77723-7202-4c92-8cf8-e7557aa61ed4-0019",
+         "user" : "root",
+         "slave_id" : "31fcae61-51a9-4ad1-8054-538503eb53a9-S5",
+         "name" : "ChronosTask:afiliados-sleep-10",
+         "statuses" : [
+            {
+               "timestamp" : 1526411131.69834,
+               "container_status" : {
+                  "container_id" : {
+                     "value" : "f920cc7e-106a-435b-a578-c696d812bf53"
+                  },
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "172.17.0.5",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ]
+               },
+               "state" : "TASK_RUNNING",
+               "labels" : [
+                  {
+                     "value" : "172.17.0.5",
+                     "key" : "Docker.NetworkSettings.IPAddress"
+                  }
+               ]
+            },
+            {
+               "container_status" : {
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "protocol" : "IPv4",
+                              "ip_address" : "10.168.200.93"
+                           }
+                        ]
+                     }
+                  ],
+                  "container_id" : {
+                     "value" : "f920cc7e-106a-435b-a578-c696d812bf53"
+                  }
+               },
+               "state" : "TASK_FINISHED",
+               "timestamp" : 1526411141.14025
+            }
+         ]
+      },
+      {
+         "resources" : {
+            "mem" : 32,
+            "gpus" : 0,
+            "disk" : 256,
+            "cpus" : 0.1
+         },
+         "container" : {
+            "type" : "DOCKER",
+            "docker" : {
+               "parameters" : [
+                  {
+                     "key" : "label",
+                     "value" : "hollowman.appname=/chronos/infra/curator-delete-indices"
+                  }
+               ],
+               "privileged" : false,
+               "image" : "alpine:3.4",
+               "force_pull_image" : true,
+               "network" : "BRIDGE"
+            }
+         },
+         "framework_id" : "3db77723-7202-4c92-8cf8-e7557aa61ed4-0019",
+         "executor_id" : "",
+         "slave_id" : "2084863b-12d1-4319-b515-992eab91a53d-S0",
+         "user" : "root",
+         "statuses" : [
+            {
+               "timestamp" : 1526411054.04255,
+               "labels" : [
+                  {
+                     "key" : "Docker.NetworkSettings.IPAddress",
+                     "value" : "172.17.0.4"
+                  }
+               ],
+               "state" : "TASK_RUNNING",
+               "container_status" : {
+                  "container_id" : {
+                     "value" : "21161ea4-ff31-4117-a7e3-b9c0dcae587e"
+                  },
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "protocol" : "IPv4",
+                              "ip_address" : "172.17.0.4"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "timestamp" : 1526411064.26344,
+               "container_status" : {
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "10.168.200.96",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ],
+                  "container_id" : {
+                     "value" : "21161ea4-ff31-4117-a7e3-b9c0dcae587e"
+                  }
+               },
+               "state" : "TASK_FINISHED"
+            }
+         ],
+         "name" : "ChronosTask:afiliados-sleep-10",
+         "id" : "ct:1526411040002:0:afiliados-sleep-10:",
+         "role" : "*",
+         "state" : "TASK_FINISHED"
+      },
+      {
+         "state" : "TASK_RUNNING",
+         "role" : "*",
+         "id" : "ct:1526411400002:0:afiliados-sleep-10:",
+         "statuses" : [
+            {
+               "timestamp" : 1526411009.01099,
+               "state" : "TASK_RUNNING",
+               "labels" : [
+                  {
+                     "value" : "172.17.0.5",
+                     "key" : "Docker.NetworkSettings.IPAddress"
+                  }
+               ],
+               "container_status" : {
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  },
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "172.17.0.5",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "state" : "TASK_FINISHED",
+               "container_status" : {
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "10.168.200.92",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ],
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  }
+               },
+               "timestamp" : 1526411018.95543
+            }
+         ],
+         "name" : "ChronosTask:afiliados-sleep-10",
+         "user" : "root",
+         "slave_id" : "84afe7c7-368e-411c-b64c-e4e49a45eaf7-S0",
+         "executor_id" : "",
+         "framework_id" : "3db77723-7202-4c92-8cf8-e7557aa61ed4-0019",
+         "container" : {
+            "type" : "DOCKER",
+            "docker" : {
+               "force_pull_image" : true,
+               "network" : "BRIDGE",
+               "image" : "alpine:3.4",
+               "privileged" : false,
+               "parameters" : [
+                  {
+                     "key" : "label",
+                     "value" : "hollowman.appname=/chronos/infra/curator-delete-indices"
+                  }
+               ]
+            }
+         },
+         "resources" : {
+            "gpus" : 0,
+            "mem" : 32,
+            "disk" : 256,
+            "cpus" : 0.1
+         }
+      },
+      {
+         "state" : "TASK_RUNNING",
+         "role" : "*",
+         "id" : "ct:1526411400002:0:afiliados-sleep-10:",
+         "statuses" : [
+            {
+               "timestamp" : 1526411009.01099,
+               "state" : "TASK_RUNNING",
+               "labels" : [
+                  {
+                     "value" : "172.17.0.5",
+                     "key" : "Docker.NetworkSettings.IPAddress"
+                  }
+               ],
+               "container_status" : {
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  },
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "172.17.0.5",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "state" : "TASK_FINISHED",
+               "container_status" : {
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "10.168.200.92",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ],
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  }
+               },
+               "timestamp" : 1526411018.95543
+            }
+         ],
+         "name" : "ChronosTask:afiliados-sleep-10",
+         "user" : "root",
+         "slave_id" : "84afe7c7-368e-411c-b64c-e4e49a45eaf7-S0",
+         "executor_id" : "",
+         "framework_id" : "3db77723-7202-4c92-8cf8-e7557aa61ed4-0019",
+         "container" : {
+            "type" : "DOCKER",
+            "docker" : {
+               "force_pull_image" : true,
+               "network" : "BRIDGE",
+               "image" : "alpine:3.4",
+               "privileged" : false,
+               "parameters" : [
+                  {
+                     "key" : "label",
+                     "value" : "hollowman.appname=/chronos/infra/curator-delete-indices"
+                  }
+               ]
+            }
+         },
+         "resources" : {
+            "gpus" : 0,
+            "mem" : 32,
+            "disk" : 256,
+            "cpus" : 0.1
+         }
+      },
+{
+         "state" : "TASK_FAILED",
+         "role" : "*",
+         "id" : "ct:1526411400002:0:afiliados-sleep-10:",
+         "statuses" : [
+            {
+               "timestamp" : 1526411009.01099,
+               "state" : "TASK_RUNNING",
+               "labels" : [
+                  {
+                     "value" : "172.17.0.5",
+                     "key" : "Docker.NetworkSettings.IPAddress"
+                  }
+               ],
+               "container_status" : {
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  },
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "172.17.0.5",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "state" : "TASK_FINISHED",
+               "container_status" : {
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "10.168.200.92",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ],
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  }
+               },
+               "timestamp" : 1526411018.95543
+            }
+         ],
+         "name" : "ChronosTask:afiliados-sleep-10",
+         "user" : "root",
+         "slave_id" : "84afe7c7-368e-411c-b64c-e4e49a45eaf7-S0",
+         "executor_id" : "",
+         "framework_id" : "3db77723-7202-4c92-8cf8-e7557aa61ed4-0019",
+         "container" : {
+            "type" : "DOCKER",
+            "docker" : {
+               "force_pull_image" : true,
+               "network" : "BRIDGE",
+               "image" : "alpine:3.4",
+               "privileged" : false,
+               "parameters" : [
+                  {
+                     "key" : "label",
+                     "value" : "hollowman.appname=/chronos/infra/curator-delete-indices"
+                  }
+               ]
+            }
+         },
+         "resources" : {
+            "gpus" : 0,
+            "mem" : 32,
+            "disk" : 256,
+            "cpus" : 0.1
+         }
+      },
+{
+         "state" : "TASK_KILLED",
+         "role" : "*",
+         "id" : "ct:1526411400002:0:afiliados-sleep-10:",
+         "statuses" : [
+            {
+               "timestamp" : 1526411009.01099,
+               "state" : "TASK_RUNNING",
+               "labels" : [
+                  {
+                     "value" : "172.17.0.5",
+                     "key" : "Docker.NetworkSettings.IPAddress"
+                  }
+               ],
+               "container_status" : {
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  },
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "172.17.0.5",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "state" : "TASK_FINISHED",
+               "container_status" : {
+                  "network_infos" : [
+                     {
+                        "ip_addresses" : [
+                           {
+                              "ip_address" : "10.168.200.92",
+                              "protocol" : "IPv4"
+                           }
+                        ]
+                     }
+                  ],
+                  "container_id" : {
+                     "value" : "191d358c-6818-4714-a8db-a94a839dab0b"
+                  }
+               },
+               "timestamp" : 1526411018.95543
+            }
+         ],
+         "name" : "ChronosTask:afiliados-sleep-10",
+         "user" : "root",
+         "slave_id" : "84afe7c7-368e-411c-b64c-e4e49a45eaf7-S0",
+         "executor_id" : "",
+         "framework_id" : "3db77723-7202-4c92-8cf8-e7557aa61ed4-0019",
+         "container" : {
+            "type" : "DOCKER",
+            "docker" : {
+               "force_pull_image" : true,
+               "network" : "BRIDGE",
+               "image" : "alpine:3.4",
+               "privileged" : false,
+               "parameters" : [
+                  {
+                     "key" : "label",
+                     "value" : "hollowman.appname=/chronos/infra/curator-delete-indices"
+                  }
+               ]
+            }
+         },
+         "resources" : {
+            "gpus" : 0,
+            "mem" : 32,
+            "disk" : 256,
+            "cpus" : 0.1
+         }
+      }
+   ]
+}
