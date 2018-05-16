@@ -25,6 +25,15 @@ def attrs_count():
         mimetype='application/json'
     )
 
+@mesos_metrics_blueprint.route('/tasks/count')
+def tasks_count():
+    config.logger.debug("Counting tasks")
+    mesos_tasks = mesos.get_tasks()
+    return Response(
+        dumps(mesos_tasks),
+        mimetype='application/json'
+    )
+
 @mesos_metrics_blueprint.route('/attrs')
 def attrs():
     config.logger.debug("Reading attrs")
