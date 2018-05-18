@@ -101,7 +101,7 @@ class MesosTest(TestCase):
     def test_get_slaves_with_attrs_count_endpoint(self, master_tasks_fixture):
         client = self.application.test_client()
         with RequestsMock() as rsps:
-            rsps.add(method='GET', url="http://10.0.0.1:5050/tasks", body=json.dumps(master_tasks_fixture), status=200)
+            rsps.add(method='GET', url="http://10.0.0.1:5050/tasks?limit=-1", body=json.dumps(master_tasks_fixture), status=200, match_querystring=True)
             response = client.get("/metrics/tasks/count")
             self.assertEqual(200, response.status_code)
             response_data = json.loads(response.data)
