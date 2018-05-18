@@ -97,6 +97,20 @@ class MesosTest(TestCase):
             response_data = json.loads(response.data)
             self.assertEqual(6, response_data['total_slaves'])
 
+    @with_json_fixture("fixtures/master-tasks.json")
+    def test_get_slaves_with_attrs_count_endpoint(self, master_tasks_fixture):
+        client = self.application.test_client()
+        with RequestsMock() as rsps:
+            rsps.add(method='GET', url="http://10.0.0.1:5050/tasks", body=json.dumps(master_tasks_fixture), status=200)
+            response = client.get("/metrics/tasks/count")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(2, response_data['total_running'])
+            self.assertEqual(1, response_data['total_failed'])
+            self.assertEqual(2, response_data['total_finished'])
+            self.assertEqual(1, response_data['total_killed'])
+            self.assertEqual(6, response_data['total'])
+
     @with_json_fixture("fixtures/master-slave-data.json")
     def test_attrs_endpoint(self, master_state_fixture):
         client = self.application.test_client()

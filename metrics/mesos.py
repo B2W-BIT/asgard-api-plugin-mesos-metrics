@@ -1,7 +1,21 @@
 from metrics import config
-from metrics.util import get_mesos_slaves
+from metrics.util import get_mesos_slaves, get_mesos_tasks
 from requests import get
 from collections import defaultdict
+
+def get_tasks():
+    all_tasks = get_mesos_tasks()
+    counts = defaultdict(int)
+    for task in all_tasks['tasks']:
+        counts['total'] += 1
+        counts[task['state']] += 1
+    return {
+        "total": counts['total'],
+        "total_running": counts['TASK_RUNNING'],
+        "total_finished": counts['TASK_FINISHED'],
+        "total_failed": counts['TASK_FAILED'],
+        "total_killed": counts['TASK_KILLED']
+    }
 
 def get_slaves_attr(slaves_state):
     attrs = defaultdict(set)
