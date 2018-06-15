@@ -98,18 +98,51 @@ class MesosTest(TestCase):
             self.assertEqual(6, response_data['total_slaves'])
 
     @with_json_fixture("fixtures/master-tasks.json")
-    def test_get_slaves_with_attrs_count_endpoint(self, master_tasks_fixture):
+    def test_get_tasks_count_endpoint(self, master_tasks_fixture):
         client = self.application.test_client()
         with RequestsMock() as rsps:
             rsps.add(method='GET', url="http://10.0.0.1:5050/tasks?limit=-1", body=json.dumps(master_tasks_fixture), status=200, match_querystring=True)
             response = client.get("/metrics/tasks/count")
             self.assertEqual(200, response.status_code)
             response_data = json.loads(response.data)
-            self.assertEqual(2, response_data['total_running'])
-            self.assertEqual(1, response_data['total_failed'])
-            self.assertEqual(2, response_data['total_finished'])
-            self.assertEqual(1, response_data['total_killed'])
+            self.assertEqual(2, response_data['task_running'])
+            self.assertEqual(1, response_data['task_failed'])
+            self.assertEqual(2, response_data['task_finished'])
+            self.assertEqual(1, response_data['task_killed'])
             self.assertEqual(6, response_data['total'])
+
+
+    def test_get_task_namespace_prefix(self):
+        self.assertEqual("sieve_", mesos._get_task_namespace("sieve_app_other_name.UUID"))
+        self.assertEqual("infra_", mesos._get_task_namespace("infra_app_other_name.UUID"))
+        self.assertEqual("other_", mesos._get_task_namespace("ct:1528217280003:0:afiliados-sleep-10:"))
+
+
+    @with_json_fixture("fixtures/master-tasks-multiple-namespaces.json")
+    def test_get_tasks_count_endpoint_separate_namespaces(self, master_tasks_fixture):
+        """
+        Confirmamos que fazemos a contagem por namespace também
+        """
+        client = self.application.test_client()
+        with RequestsMock() as rsps:
+            rsps.add(method='GET', url="http://10.0.0.1:5050/tasks?limit=-1", body=json.dumps(master_tasks_fixture), status=200, match_querystring=True)
+            response = client.get("/metrics/tasks/count")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(2, response_data['task_running'])
+            self.assertEqual(3, response_data['task_failed'])
+            self.assertEqual(2, response_data['task_finished'])
+            self.assertEqual(2, response_data['task_killed'])
+            self.assertEqual(9, response_data['total'])
+
+            # Namespace sieve
+            self.assertEqual(1, response_data['sieve_task_running'])
+
+            # Namespace infra
+            self.assertEqual(0, response_data['infra_task_running'])
+
+            # Chronos (que por enquanto não pertence a nehum namespace)
+            self.assertEqual(1, response_data['other_task_running'])
 
     @with_json_fixture("fixtures/master-slave-data.json")
     def test_attrs_endpoint(self, master_state_fixture):

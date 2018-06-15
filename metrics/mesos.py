@@ -3,19 +3,30 @@ from metrics.util import get_mesos_slaves, get_mesos_tasks
 from requests import get
 from collections import defaultdict
 
+CHRONOS_TASK_PREFIX = "ct"
+MESOS_TASK_RUNNING = "TASK_RUNNING"
+
+def _get_task_namespace(task_name):
+    ns = task_name.split("_")[0]
+    if task_name.startswith(CHRONOS_TASK_PREFIX):
+        ns = "other"
+    return f"{ns}_"
+
 def get_tasks():
     all_tasks = get_mesos_tasks()
     counts = defaultdict(int)
     for task in all_tasks['tasks']:
+        ns = _get_task_namespace(task['id'])
         counts['total'] += 1
-        counts[task['state']] += 1
-    return {
-        "total": counts['total'],
-        "total_running": counts['TASK_RUNNING'],
-        "total_finished": counts['TASK_FINISHED'],
-        "total_failed": counts['TASK_FAILED'],
-        "total_killed": counts['TASK_KILLED']
-    }
+        counts[task['state'].lower()] += 1
+
+        state = task['state']
+        if state == MESOS_TASK_RUNNING:
+            counts[f"{ns}{state.lower()}"] += 1
+
+        counts[f"{ns}{MESOS_TASK_RUNNING.lower()}"]
+
+    return counts
 
 def get_slaves_attr(slaves_state):
     attrs = defaultdict(set)
