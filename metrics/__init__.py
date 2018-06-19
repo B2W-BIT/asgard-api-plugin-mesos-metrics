@@ -6,6 +6,7 @@ from flask import Blueprint, Response, request
 
 from metrics import mesos, config
 from asgard.sdk import mesos as mesos_asgard_sdk
+from asgard.sdk import options
 
 mesos_metrics_blueprint = Blueprint(__name__, __name__)
 
@@ -79,6 +80,16 @@ def slaves_attr_usage():
         dumps(result),
         mimetype='application/json'
     )
+
+@mesos_metrics_blueprint.route("/masters/alive")
+def masters_alive():
+    mesos_addresses = options.get_option("MESOS", "ADDRESS")
+    result = {addr: int(mesos_asgard_sdk.is_master_healthy(addr)) for addr in mesos_addresses}
+    return Response(
+        dumps(result),
+        mimetype='application/json'
+    )
+
 
 
 def filter_mesos_metrics(server_address, prefix):
