@@ -5,6 +5,7 @@ import importlib
 from flask import Flask
 from responses import RequestsMock
 import json
+import requests
 
 from metrics import mesos, mesos_metrics_blueprint, config
 import tests
@@ -102,6 +103,24 @@ class MesosTest(TestCase):
             self.assertEqual(1, response_data['http://10.0.0.1:5050'])
             self.assertEqual(1, response_data['http://10.0.0.2:5050'])
             self.assertEqual(1, response_data['http://10.0.0.3:5050'])
+            self.assertEqual(1, response_data['all_ok'])
+
+    def test_get_masters_alive_some_down(self):
+        meso_master_addresses = ["http://10.0.0.1:5050", "http://10.0.0.2:5050", "http://10.0.0.3:5050"]
+        client = self.application.test_client()
+        with RequestsMock() as rsps, \
+                mock.patch('asgard.sdk.options', get_option=mock.MagicMock(return_value=meso_master_addresses)):
+            importlib.reload(metrics)
+            rsps.add(method='GET', url="http://10.0.0.1:5050/health", body="", status=200)
+            rsps.add(method='GET', url="http://10.0.0.2:5050/health", body=requests.exceptions.ConnectionError())
+            rsps.add(method='GET', url="http://10.0.0.3:5050/health", body="", status=200)
+            response = client.get("/metrics/masters/alive")
+            self.assertEqual(200, response.status_code)
+            response_data = json.loads(response.data)
+            self.assertEqual(1, response_data['http://10.0.0.1:5050'])
+            self.assertEqual(0, response_data['http://10.0.0.2:5050'])
+            self.assertEqual(1, response_data['http://10.0.0.3:5050'])
+            self.assertEqual(0, response_data['all_ok'])
 
     @with_json_fixture("fixtures/master-slave-data.json")
     def test_get_slaves_with_attrs_count_endpoint(self, master_state_fixture):
