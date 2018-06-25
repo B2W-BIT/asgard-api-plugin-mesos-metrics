@@ -44,6 +44,15 @@ as que possuem sufixo `_MESOS_ADDRESS_<N>`. Mais detalhes na doc da `asgard-api-
 * /master/<ip>?prefix=<prefix>: Retorna as métricas do master que começam por <prefix>.
 * /slave/<ip>?prefix=<prefix>: Retorna as métricas do slave que começam por <prefix>
 * /leader?prefix=<prefix>: Igual aos endpoints acima, mas descobre quem é o atual lider e pega dele.
+* /masters/alive: Retorna um JSON com cada IP de master e uma indicação se eles responseram ao "ping", ex:
+
+```
+{
+   "http://172.18.0.11:5050" : 0,
+   "http://172.18.0.13:5050" : 1,
+   "http://172.18.0.12:5050" : 1
+}
+```
 
 ## Running tests:
 `$ py.test --cov=metrics --cov-report term-missing -v -s`
