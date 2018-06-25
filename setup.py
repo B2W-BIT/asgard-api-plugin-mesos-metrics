@@ -6,7 +6,7 @@ here = path.abspath(path.dirname(__file__))
 
 setup(
     name='asgard-api-plugin-metrics-mesos',
-    version='0.7.0',
+    version='0.8.0-rc3',
 
     description='Asgard API endpoints to get Apache Mesos metrics',
     long_description="Plugin para a Asgard API e que fornece métricas do cluster de Apache Mesos",
@@ -20,6 +20,9 @@ setup(
     ],
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
+    install_requires = [
+        "asgard-api-sdk>=0.3.0-rc1",
+    ],
 
     entry_points={
         'asgard_api_metrics_mountpoint': [
