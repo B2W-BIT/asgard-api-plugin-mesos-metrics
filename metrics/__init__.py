@@ -86,7 +86,10 @@ def masters_alive():
     mesos_addresses = options.get_option("MESOS", "ADDRESS")
     result = {addr: int(mesos_asgard_sdk.is_master_healthy(addr)) for addr in mesos_addresses}
     all_ok = all([result[key] for key in result.keys()])
+    masters_down = len(list(filter(lambda r: r[1] == 0, result.items())))
+
     result['all_ok'] = int(all_ok)
+    result['masters_down'] = masters_down
     return Response(
         dumps(result),
         mimetype='application/json'
