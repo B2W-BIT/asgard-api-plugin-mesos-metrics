@@ -3,6 +3,9 @@
 ## Changelog
 
 
+### 0.9.0
+ * Adicionando chave `masters_down` no endpoinrt `masters/alive` para mostrar quantos masters estão sem responder.
+
 ### 0.6.0
 
  * Implementação do entpoint /tasks/count para podermos ter a contagem de tasks no cluster (IN-2535)
