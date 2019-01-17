@@ -20,9 +20,6 @@ setup(
     ],
 
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
-    install_requires = [
-        "asgard-api-sdk>=0.3.0-rc1",
-    ],
 
     entry_points={
         'asgard_api_metrics_mountpoint': [
