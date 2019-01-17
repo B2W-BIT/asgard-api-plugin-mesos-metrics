@@ -77,4 +77,6 @@ as que possuem sufixo `_MESOS_ADDRESS_<N>`. Mais detalhes na doc da [asgard-api-
 
 
 ## Running tests:
+Para que você possa rodar os testes é necessário ter uma cópia da [asgard-api](https://github.com/B2W-BIT/asgard-api) na mesma pasta onde está clonado o esse código. Isso porque uma das dependências de um plugin da asgard API é a própria Asgard API. A instalação é feita com `pipenv install -e ../asgard-api`. Essa instalação já é feita quando rodamos `pipenv install --dev`.
+
 `$ PYTHONPATH=. py.test --cov=./ --cov-report term-missing -v -s`
